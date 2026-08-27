@@ -1,0 +1,226 @@
+# ---------------------------------------------------------------------------
+# Secrets & local config  (keep committed: *.example / *.template)
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+!.env.template
+*.local.json
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+*.pem
+*.key
+*.pfx
+*.p12
+
+# ---------------------------------------------------------------------------
+# .NET / C#
+# ---------------------------------------------------------------------------
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Ll]og/
+[Ll]ogs/
+artifacts/
+publish/
+PublishProfiles/
+*.publishsettings
+*.pubxml
+*.pubxml.user
+*.azurePubxml
+
+# Build / compiler output
+*.dll
+*.exe
+*.pdb
+*.mdb
+*.dSYM/
+*.o
+*.so
+*.dylib
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sln.iml
+*.cache
+*.tlog
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.ipdb
+*.tmp_proj
+*_wpftmp.csproj
+*.VisualState.xml
+project.lock.json
+project.fragment.lock.json
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+.nuget/
+nuget.exe
+
+# Test results & coverage
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+coverage*.info
+.coverage/
+[Cc]overlet*/
+
+# Roslyn / analyzers / caches
+.vs/
+*.ide/
+.axoCover/
+BenchmarkDotNet.Artifacts/
+StyleCopReport.xml
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# EF Core scaffolding scratch (keep Migrations/ committed)
+*.mdf
+*.ldf
+*.ndf
+
+# ---------------------------------------------------------------------------
+# Node / React / Vite  (frontend)
+# ---------------------------------------------------------------------------
+node_modules/
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+dist/
+dist-ssr/
+build/
+.vite/
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+.turbo/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+storybook-static/
+
+# Package manager logs / lock noise (lockfiles themselves stay committed)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.npm/
+.pnpm-store/
+
+# Test / coverage output
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+
+# ---------------------------------------------------------------------------
+# Docker
+# ---------------------------------------------------------------------------
+docker-compose.override.local.yml
+.docker/
+**/pgdata/
+**/postgres-data/
+
+# ---------------------------------------------------------------------------
+# IDEs & editors
+# ---------------------------------------------------------------------------
+# JetBrains (Rider / WebStorm)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Visual Studio Code — keep shared workspace config, drop personal state
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+*.code-workspace
+
+# Visual Studio
+*.sln.ide/
+*.vssscc
+*.vspscc
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Misc editors
+*.swp
+*.swo
+*~
+.\#*
+\#*\#
+.history/
+*.bak
+*.orig
+*.rej
+
+# ---------------------------------------------------------------------------
+# OS
+# ---------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+.fuse_hidden*
+.directory
+.nfs*
+
+# ---------------------------------------------------------------------------
+# Archives & scratch
+# ---------------------------------------------------------------------------
+*.log
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+tmp/
+temp/
+scratch/
