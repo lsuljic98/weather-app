@@ -104,9 +104,7 @@ namespace WeatherApp.Infrastructure.Migrations
                 columns: new[] { "user_id", "searched_at" },
                 descending: new[] { false, true });
 
-            // Case-insensitive uniqueness (PLAN §4). A functional index cannot be expressed
-            // through the fluent API, so it is created here and deliberately absent from
-            // UserConfiguration and the model snapshot.
+            // Case-insensitive uniqueness
             migrationBuilder.Sql(
                 """CREATE UNIQUE INDEX ix_users_email ON users (lower(email));""");
         }
