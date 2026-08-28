@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Osijek",
+    "local_names": {
+      "ru": "Осиек",
+      "hu": "Eszék",
+      "la": "Mursa",
+      "de": "Esseg",
+      "en": "Osijek",
+      "it": "Essecio",
+      "hr": "Osijek",
+      "sr": "Осијек",
+      "ar": "أوسييك",
+      "lt": "Osijekas",
+      "fr": "Osijek",
+      "es": "Osijek"
+    },
+    "lat": 45.5548793,
+    "lon": 18.6953685,
+    "country": "HR"
+  },
+  {
+    "name": "Grad Osijek",
+    "local_names": {
+      "hr": "Grad Osijek"
+    },
+    "lat": 45.5205,
+    "lon": 18.776139147885612,
+    "country": "HR"
+  },
+  {
+    "name": "Osijek",
+    "local_names": {
+      "ar": "أوسييك",
+      "sr": "Осијек"
+    },
+    "lat": 43.8433628,
+    "lon": 18.2818711,
+    "country": "BA",
+    "state": "Federation of Bosnia and Herzegovina"
+  }
+]

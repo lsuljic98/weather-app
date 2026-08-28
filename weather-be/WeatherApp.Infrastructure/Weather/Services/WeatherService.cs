@@ -68,7 +68,18 @@ public sealed class WeatherService(IWeatherApiClient client, IMemoryCache cache)
 
         var offset = forecast.City.TimezoneOffsetSeconds;
 
+        var days = forecast.Entries
+            .GroupBy(e => DateOnly.FromDateTime(e.LocalTime(offset).Date))
+            .OrderBy(group => group.Key)
+                .Take(5) // Because of the trailing last day
+            .Select(group => Summarise(group.Key, [.. group], offset))
+            .ToArray();
+
+        var keptDates = days.Select(d => d.Date).ToHashSet();
+
+        // Only readings from the kept days, so the chart never shows a day the grid does not have.
         var points = forecast.Entries
+            .Where(e => keptDates.Contains(DateOnly.FromDateTime(e.LocalTime(offset).Date)))
             .Select(e => new ForecastPointDto(
                 LocalTime: e.LocalTime(offset),
                 TemperatureC: e.Main.TemperatureC,
@@ -77,14 +88,6 @@ public sealed class WeatherService(IWeatherApiClient client, IMemoryCache cache)
                 PrecipitationProbability: e.PrecipitationProbability,
                 Condition: e.Conditions.FirstOrDefault()?.Main ?? string.Empty,
                 Icon: e.Conditions.FirstOrDefault()?.Icon ?? string.Empty))
-            .ToArray();
-
-        // Take(5) drops the trailing partial day the 120-hour window leaves behind.
-        var days = forecast.Entries
-            .GroupBy(e => DateOnly.FromDateTime(e.LocalTime(offset).Date))
-            .OrderBy(group => group.Key)
-            .Take(5)
-            .Select(group => Summarise(group.Key, [.. group], offset))
             .ToArray();
 
         return new ForecastDto(
@@ -106,7 +109,7 @@ public sealed class WeatherService(IWeatherApiClient client, IMemoryCache cache)
             Date: date,
             MinTemperatureC: entries.Min(e => e.Main.TemperatureC),
             MaxTemperatureC: entries.Max(e => e.Main.TemperatureC),
-            Humidity: (int)Math.Round(entries.Average(e => e.Main.Humidity)),
+            Humidity: (int)Math.Round(entries.Average(e => e.Main.Humidity), MidpointRounding.AwayFromZero),
             WindSpeed: entries.Max(e => e.Wind.Speed),
             PrecipitationProbability: entries.Max(e => e.PrecipitationProbability),
             Condition: condition?.Main ?? string.Empty,
