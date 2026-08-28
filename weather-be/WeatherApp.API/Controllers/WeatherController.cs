@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using WeatherApp.Application.Abstractions;
 using WeatherApp.Application.Weather;
@@ -10,26 +9,34 @@ namespace WeatherApp.API.Controllers;
 [Produces("application/json")]
 public sealed class WeatherController(IWeatherService weatherService) : ControllerBase
 {
-    /// <summary>Current conditions for a city.</summary>
-    [HttpGet("current/{city}")]
+    [HttpGet("cities")]
+    [ProducesResponseType<IReadOnlyList<CityDto>>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<CityDto>>> SearchCities(
+        [FromQuery] string q,
+        CancellationToken ct)
+        => Ok(await weatherService.SearchCitiesAsync(q, ct: ct));
+
+    [HttpGet("current")]
     [ProducesResponseType<CurrentWeatherDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CurrentWeatherDto>> GetCurrent(string city, CancellationToken ct)
+    public async Task<ActionResult<CurrentWeatherDto>> GetCurrent(
+        [FromQuery] string city,
+        [FromQuery] string? countryCode,
+        CancellationToken ct)
     {
-        var current = await weatherService.GetCurrentAsync(city, ct);
+        var current = await weatherService.GetCurrentAsync(city, countryCode, ct);
         return current is null ? NotFound() : Ok(current);
     }
 
-    /// <summary>Daily forecast for a city.</summary>
-    [HttpGet("forecast/{city}")]
+    [HttpGet("forecast")]
     [ProducesResponseType<ForecastDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ForecastDto>> GetForecast(
-        string city,
-        [FromQuery] [Range(1, 14)] int days,
+        [FromQuery] string city,
+        [FromQuery] string? countryCode,
         CancellationToken ct)
     {
-        var forecast = await weatherService.GetForecastAsync(city, days, ct);
+        var forecast = await weatherService.GetForecastAsync(city, countryCode, ct);
         return forecast is null ? NotFound() : Ok(forecast);
     }
 }

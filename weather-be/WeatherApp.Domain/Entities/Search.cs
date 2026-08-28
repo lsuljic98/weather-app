@@ -1,10 +1,8 @@
 namespace WeatherApp.Domain.Entities;
 
 /// <summary>
-/// One forecast search performed by a user. The current-conditions snapshot is
-/// denormalised onto the row on purpose: history and statistics are then single-table
-/// reads that never call OpenWeather again. <see cref="BaseEntity.CreatedAt"/> is the
-/// search time and maps to <c>searched_at</c>.
+/// One forecast search. The current-conditions snapshot is denormalised onto the row so
+/// history and statistics are single-table reads. CreatedAt is the search time.
 /// </summary>
 public sealed class Search : BaseEntity
 {
@@ -50,29 +48,27 @@ public sealed class Search : BaseEntity
 
     public User User { get; private set; } = null!;
 
-    /// <summary>Canonical name as resolved by geocoding, not the raw text the user typed.</summary>
+    /// <summary>Canonical name from geocoding, not the raw text typed.</summary>
     public string CityName { get; private set; } = null!;
 
-    /// <summary>ISO 3166-1 alpha-2, e.g. <c>HR</c>.</summary>
+    /// <summary>ISO 3166-1 alpha-2.</summary>
     public string CountryCode { get; private set; } = null!;
 
     public double Latitude { get; private set; }
 
     public double Longitude { get; private set; }
 
-    /// <summary>OpenWeather condition group: <c>Clear</c>, <c>Rain</c>, <c>Clouds</c>, … Groups the distribution chart.</summary>
+    /// <summary>Condition group (Clear, Rain, Clouds, ...); groups the distribution chart.</summary>
     public string ConditionMain { get; private set; } = null!;
 
     public string Description { get; private set; } = null!;
 
-    /// <summary>OpenWeather icon code, e.g. <c>04d</c>.</summary>
     public string Icon { get; private set; } = null!;
 
     public double TemperatureC { get; private set; }
 
-    /// <summary>Percent, 0–100.</summary>
     public int Humidity { get; private set; }
 
-    /// <summary>Metres per second, as returned by OpenWeather with <c>units=metric</c>.</summary>
+    /// <summary>Metres per second.</summary>
     public double WindSpeed { get; private set; }
 }

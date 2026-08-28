@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using WeatherApp.Application.Abstractions;
 using WeatherApp.Application.Weather;
 using WeatherApp.Infrastructure.Weather;
+using WeatherApp.Infrastructure.Weather.Services;
+using WeatherApp.Infrastructure.Weather.Services.Abstractions;
 
 namespace WeatherApp.Infrastructure;
 
@@ -23,7 +26,26 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddSingleton<IWeatherService, InMemoryWeatherService>();
+        services.AddMemoryCache(options => options.SizeLimit = 1_000);
+
+        services.AddHttpClient<IWeatherApiClient, WeatherApiClient>((provider, http) =>
+            {
+                var settings = provider.GetRequiredService<IOptions<WeatherServiceConfiguration>>().Value;
+
+                // BaseAddress needs the trailing slash, or a relative path replaces the last segment.
+                http.BaseAddress = new Uri(settings.BaseUrl.TrimEnd('/') + "/");
+
+                // The resilience pipeline below controls every timeout
+                http.Timeout = Timeout.InfiniteTimeSpan;
+            })
+            .AddStandardResilienceHandler(options =>
+            {
+                options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(5);
+                options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(20);
+                options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(10);
+            });
+
+        services.AddScoped<IWeatherService, WeatherService>();
 
         return services;
     }

@@ -1,9 +1,5 @@
 namespace WeatherApp.Domain.Entities;
 
-/// <summary>
-/// An application user. Deliberately not ASP.NET Identity — this is email plus a hash;
-/// the hashing itself belongs to the Infrastructure layer.
-/// </summary>
 public sealed class User : BaseEntity
 {
     private readonly List<RefreshToken> _refreshTokens = [];
@@ -22,7 +18,6 @@ public sealed class User : BaseEntity
 
     public string Email { get; private set; } = null!;
 
-    /// <summary>Output of <c>IPasswordHasher</c> — never the raw password.</summary>
     public string PasswordHash { get; private set; } = null!;
 
     public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens;
