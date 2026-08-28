@@ -21,7 +21,7 @@ services:
   web:
     build:
       target: dev
-    ports:
+    ports: !override
       - "${WEB_PORT:-5173}:5173"
     volumes:
       - ./weather-fe:/app
