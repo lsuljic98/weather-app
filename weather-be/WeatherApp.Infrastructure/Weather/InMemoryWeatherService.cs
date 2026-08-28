@@ -1,3 +1,4 @@
+using WeatherApp.Application.Abstractions;
 using WeatherApp.Application.Weather;
 
 namespace WeatherApp.Infrastructure.Weather;

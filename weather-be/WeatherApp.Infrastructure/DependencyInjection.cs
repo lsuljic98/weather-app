@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WeatherApp.Application.Abstractions;
 using WeatherApp.Application.Weather;
 using WeatherApp.Infrastructure.Weather;
 
@@ -16,6 +17,11 @@ public static class DependencyInjection
                 "appsettings.json, or ConnectionStrings__Default in the environment.");
 
         services.AddDbContext<WeatherDbContext>(options => options.UseNpgsql(connectionString));
+
+        services.AddOptions<WeatherServiceConfiguration>()
+            .Bind(configuration.GetSection(WeatherServiceConfiguration.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         services.AddSingleton<IWeatherService, InMemoryWeatherService>();
 

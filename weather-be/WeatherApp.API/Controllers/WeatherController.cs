@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using WeatherApp.Application.Abstractions;
 using WeatherApp.Application.Weather;
 
 namespace WeatherApp.API.Controllers;

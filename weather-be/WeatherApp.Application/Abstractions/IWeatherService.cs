@@ -1,4 +1,6 @@
-namespace WeatherApp.Application.Weather;
+using WeatherApp.Application.Weather;
+
+namespace WeatherApp.Application.Abstractions;
 
 public interface IWeatherService
 {
