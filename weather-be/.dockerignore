@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+**/.idea/
+**/.vs/
+**/.vscode/
+**/*.user
+**/.DS_Store
+**/appsettings.Local.json
+**/.env
+Dockerfile
+.dockerignore

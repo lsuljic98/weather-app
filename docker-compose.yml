@@ -1,0 +1,66 @@
+name: weather-app
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: weather-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-weatherapp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-weatherapp}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-weatherapp} -d ${POSTGRES_DB:-weatherapp}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  api:
+    build:
+      context: ./weather-be
+      target: final
+    container_name: weather-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__Default: "Host=db;Port=5432;Database=${POSTGRES_DB:-weatherapp};Username=${POSTGRES_USER:-weatherapp};Password=${POSTGRES_PASSWORD}"
+      OpenWeather__ApiKey: ${OPENWEATHER_API_KEY:?set OPENWEATHER_API_KEY in .env}
+      OpenWeather__BaseUrl: "https://api.openweathermap.org"
+      Jwt__Key: ${JWT_KEY:?set JWT_KEY in .env}
+      Jwt__Issuer: ${JWT_ISSUER:-weather-api}
+      Jwt__Audience: ${JWT_AUDIENCE:-weather-web}
+      Jwt__AccessTokenMinutes: ${JWT_ACCESS_MINUTES:-15}
+      Jwt__RefreshTokenDays: ${JWT_REFRESH_DAYS:-7}
+      ApplyMigrationsOnStartup: "true"
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      # plain TCP probe — no curl in the runtime image and no /health endpoint yet.
+      # Swap for `curl -f http://localhost:8080/health` once you add MapHealthChecks.
+      test: ["CMD-SHELL", "timeout 2 bash -c '</dev/tcp/127.0.0.1/8080' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  web:
+    build:
+      context: ./weather-fe
+      target: final
+    container_name: weather-web
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-5173}:80"
+    depends_on:
+      api:
+        condition: service_started
+
+volumes:
+  pgdata:

@@ -1,0 +1,31 @@
+# Loaded automatically by `docker compose up` — development only.
+# Source is bind-mounted and both apps hot-reload. Delete or rename this file
+# (or use `docker compose -f docker-compose.yml up`) to run the production images.
+
+services:
+  db:
+    ports:
+      - "${DB_PORT:-5432}:5432"   # so you can attach Rider / psql from the host
+
+  api:
+    build:
+      target: dev
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    volumes:
+      - ./weather-be:/src
+      - /src/WeatherApp.API/bin
+      - /src/WeatherApp.API/obj
+      - nuget:/root/.nuget/packages
+
+  web:
+    build:
+      target: dev
+    ports:
+      - "${WEB_PORT:-5173}:5173"
+    volumes:
+      - ./weather-fe:/app
+      - /app/node_modules
+
+volumes:
+  nuget:
