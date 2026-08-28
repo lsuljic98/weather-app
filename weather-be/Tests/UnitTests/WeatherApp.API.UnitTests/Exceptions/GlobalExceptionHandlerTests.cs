@@ -16,7 +16,7 @@ public class GlobalExceptionHandlerTests
 
     private static async Task<Outcome> RunAsync(Exception exception, IProblemDetailsService? problemDetails = null)
     {
-        var provider = new ServiceCollection().AddLogging().AddProblemDetails().BuildServiceProvider();
+        await using var provider = new ServiceCollection().AddLogging().AddProblemDetails().BuildServiceProvider();
         var context = new DefaultHttpContext();
         context.Request.Method = "GET";
         context.Request.Path = "/api/weather/current";
@@ -28,7 +28,8 @@ public class GlobalExceptionHandlerTests
 
         context.Response.Body.Position = 0;
         var text = await new StreamReader(context.Response.Body).ReadToEndAsync();
-        var body = text.Length == 0 ? default : JsonDocument.Parse(text).RootElement.Clone();
+        using var document = text.Length == 0 ? null : JsonDocument.Parse(text);
+        var body = document?.RootElement.Clone() ?? default;
         return new Outcome(handled, context, body, logger);
     }
 
