@@ -16,6 +16,12 @@ services:
       - ./weather-be:/src
       - /src/WeatherApp.API/bin
       - /src/WeatherApp.API/obj
+      - /src/WeatherApp.Application/bin
+      - /src/WeatherApp.Application/obj
+      - /src/WeatherApp.Domain/bin
+      - /src/WeatherApp.Domain/obj
+      - /src/WeatherApp.Infrastructure/bin
+      - /src/WeatherApp.Infrastructure/obj
       - nuget:/root/.nuget/packages
 
   web:
