@@ -2,6 +2,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shouldly;
+using WeatherApp.Application.Statistics;
 using WeatherApp.Domain.Entities;
 using WeatherApp.Infrastructure.Repositories;
 
@@ -125,6 +126,54 @@ public sealed class SearchRepositoryTests : IDisposable
         await Should.ThrowAsync<ArgumentOutOfRangeException>(() => repo.GetPageAsync(_alice.Id, page, pageSize));
     }
 
-    private static Search Row(Guid userId, string city, double temp = 20, string condition = "Clear") =>
-        new(userId, city, "HR", 45.8, 15.9, condition, "clear sky", "01d", temp, 40, 2.5);
+    [Fact]
+    public async Task GetTopCitiesAsync_ShouldGroupByCityAndCountryMostFrequentFirst()
+    {
+        await using var db = new SqliteWeatherDbContext(_options);
+        var repo = new SearchRepository(db);
+        foreach (var _ in Enumerable.Range(0, 3)) await repo.AddAsync(Row(_alice.Id, "Zagreb"));
+        foreach (var _ in Enumerable.Range(0, 2)) await repo.AddAsync(Row(_alice.Id, "Springfield", country: "US"));
+        await repo.AddAsync(Row(_alice.Id, "Springfield", country: "AU"));
+        await repo.AddAsync(Row(_alice.Id, "Rijeka"));
+        foreach (var _ in Enumerable.Range(0, 5)) await repo.AddAsync(Row(_bob.Id, "Rijeka"));
+
+        var top = await repo.GetTopCitiesAsync(_alice.Id, take: 3);
+
+        top.ShouldBe([
+            new TopCityDto("Zagreb", "HR", 3),
+            new TopCityDto("Springfield", "US", 2),
+            new TopCityDto("Rijeka", "HR", 1)]); // ties on count break by city name: Rijeka < Springfield/AU
+    }
+
+    [Fact]
+    public async Task GetTopCitiesAsync_ShouldHonourTake()
+    {
+        await using var db = new SqliteWeatherDbContext(_options);
+        var repo = new SearchRepository(db);
+        foreach (var city in new[] { "A", "B", "C", "D" })
+            await repo.AddAsync(Row(_alice.Id, city));
+
+        (await repo.GetTopCitiesAsync(_alice.Id, take: 1)).Count.ShouldBe(1);
+        (await repo.GetTopCitiesAsync(_alice.Id, take: 10)).Count.ShouldBe(4);
+        await Should.ThrowAsync<ArgumentOutOfRangeException>(() => repo.GetTopCitiesAsync(_alice.Id, take: 0));
+    }
+
+    [Fact]
+    public async Task GetConditionCountsAsync_ShouldCountPerConditionForThatUserLargestFirst()
+    {
+        await using var db = new SqliteWeatherDbContext(_options);
+        var repo = new SearchRepository(db);
+        await repo.AddAsync(Row(_alice.Id, "A", condition: "Rain"));
+        await repo.AddAsync(Row(_alice.Id, "B", condition: "Rain"));
+        await repo.AddAsync(Row(_alice.Id, "C", condition: "Clear"));
+        await repo.AddAsync(Row(_bob.Id, "D", condition: "Snow"));
+
+        var counts = await repo.GetConditionCountsAsync(_alice.Id);
+
+        counts.ShouldBe([new ConditionCountDto("Rain", 2), new ConditionCountDto("Clear", 1)]);
+        (await repo.GetConditionCountsAsync(Guid.CreateVersion7())).ShouldBeEmpty();
+    }
+
+    private static Search Row(Guid userId, string city, double temp = 20, string condition = "Clear", string country = "HR") =>
+        new(userId, city, country, 45.8, 15.9, condition, "clear sky", "01d", temp, 40, 2.5);
 }

@@ -34,7 +34,7 @@ public sealed class SearchService(IWeatherService weather, ISearchRepository sea
             ? []
             : await searches.GetPageAsync(userId, page, pageSize, ct);
 
-        return new PagedResult<SearchRecordDto>([.. rows.Select(ToDto)], page, pageSize, total);
+        return new PagedResult<SearchRecordDto>([.. rows.Select(SearchRecordDto.From)], page, pageSize, total);
     }
 
     /// <summary>
@@ -61,18 +61,4 @@ public sealed class SearchService(IWeatherService weather, ISearchRepository sea
 
     private static string Or(string? value, string fallback) =>
         string.IsNullOrWhiteSpace(value) ? fallback : value;
-
-    private static SearchRecordDto ToDto(Search s) => new(
-        s.Id,
-        s.CityName,
-        s.CountryCode,
-        s.Latitude,
-        s.Longitude,
-        s.CreatedAt,
-        s.TemperatureC,
-        s.Humidity,
-        s.WindSpeed,
-        s.ConditionMain,
-        s.Description,
-        s.Icon);
 }

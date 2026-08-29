@@ -1,3 +1,4 @@
+using WeatherApp.Application.Statistics;
 using WeatherApp.Domain.Entities;
 
 namespace WeatherApp.Application.Abstractions;
@@ -11,4 +12,13 @@ public interface ISearchRepository
     Task<IReadOnlyList<Search>> GetPageAsync(Guid userId, int page, int pageSize, CancellationToken ct = default);
 
     Task<int> CountAsync(Guid userId, CancellationToken ct = default);
+
+    /// <summary>
+    /// The user's most searched (city, country) pairs, most frequent first; ties break on city
+    /// name so the order is stable. Aggregated in the database.
+    /// </summary>
+    Task<IReadOnlyList<TopCityDto>> GetTopCitiesAsync(Guid userId, int take, CancellationToken ct = default);
+
+    /// <summary>Search count per condition group for the user, largest first. Aggregated in the database.</summary>
+    Task<IReadOnlyList<ConditionCountDto>> GetConditionCountsAsync(Guid userId, CancellationToken ct = default);
 }

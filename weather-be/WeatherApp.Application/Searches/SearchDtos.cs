@@ -1,3 +1,5 @@
+using WeatherApp.Domain.Entities;
+
 namespace WeatherApp.Application.Searches;
 
 public sealed record SearchRecordDto(
@@ -12,7 +14,22 @@ public sealed record SearchRecordDto(
     double WindSpeed,
     string Condition,
     string Description,
-    string Icon);
+    string Icon)
+{
+    public static SearchRecordDto From(Search s) => new(
+        s.Id,
+        s.CityName,
+        s.CountryCode,
+        s.Latitude,
+        s.Longitude,
+        s.CreatedAt,
+        s.TemperatureC,
+        s.Humidity,
+        s.WindSpeed,
+        s.ConditionMain,
+        s.Description,
+        s.Icon);
+}
 
 public sealed record PagedResult<T>(
     IReadOnlyList<T> Items,
