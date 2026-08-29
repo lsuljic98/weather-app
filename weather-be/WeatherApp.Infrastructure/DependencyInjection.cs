@@ -3,7 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Auth;
 using WeatherApp.Application.Weather;
+using WeatherApp.Infrastructure.Auth;
+using WeatherApp.Infrastructure.Repositories;
 using WeatherApp.Infrastructure.Weather;
 using WeatherApp.Infrastructure.Weather.Services;
 using WeatherApp.Infrastructure.Weather.Services.Abstractions;
@@ -26,6 +29,16 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddOptions<AuthOptions>()
+            .Bind(configuration.GetSection(AuthOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddSingleton<IPasswordHasher, IdentityPasswordHasher>();
+        services.AddSingleton<IAccessTokenIssuer, JwtAccessTokenIssuer>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
         services.AddMemoryCache(options => options.SizeLimit = 1_000);
 
         services.AddHttpClient<IWeatherApiClient, WeatherApiClient>((provider, http) =>
@@ -46,6 +59,7 @@ public static class DependencyInjection
             });
 
         services.AddScoped<IWeatherService, WeatherService>();
+        services.AddScoped<ISearchRepository, SearchRepository>();
 
         return services;
     }

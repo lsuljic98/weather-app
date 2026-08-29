@@ -17,14 +17,12 @@ public sealed class RefreshToken : BaseEntity
 
     public User User { get; private set; } = null!;
 
-    /// <summary>SHA-256 of the token; the raw value is never stored.</summary>
-    public byte[] TokenHash { get; private set; } = null!;
+    public byte[] TokenHash { get; private set; } = null!; // SHA-256
 
     public DateTimeOffset ExpiresAt { get; private set; }
 
     public DateTimeOffset? RevokedAt { get; private set; }
 
-    /// <summary>A hit on an already-replaced token means reuse.</summary>
     public Guid? ReplacedByTokenId { get; private set; }
 
     public bool IsRevoked => RevokedAt is not null;

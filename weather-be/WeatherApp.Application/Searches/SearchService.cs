@@ -1,0 +1,78 @@
+using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Weather;
+using WeatherApp.Domain.Entities;
+
+namespace WeatherApp.Application.Searches;
+
+public sealed class SearchService(IWeatherService weather, ISearchRepository searches) : ISearchService
+{
+    public const int MaxPageSize = 100;
+
+    // Used when the provider sends a reading without a condition, so the row is still written.
+    private const string UnknownCondition = "Unknown";
+
+    public async Task<ForecastDto?> SearchForecastAsync(
+        Guid userId, string city, string? countryCode = null, CancellationToken ct = default)
+    {
+        var forecast = await weather.GetForecastAsync(city, countryCode, ct);
+        if (forecast is null)
+            return null;
+
+        await searches.AddAsync(Snapshot(userId, forecast), ct);
+
+        return forecast;
+    }
+
+    public async Task<PagedResult<SearchRecordDto>> GetHistoryAsync(
+        Guid userId, int page, int pageSize, CancellationToken ct = default)
+    {
+        page = Math.Max(page, 1);
+        pageSize = Math.Clamp(pageSize, 1, MaxPageSize);
+
+        var total = await searches.CountAsync(userId, ct);
+        var rows = total == 0
+            ? []
+            : await searches.GetPageAsync(userId, page, pageSize, ct);
+
+        return new PagedResult<SearchRecordDto>([.. rows.Select(ToDto)], page, pageSize, total);
+    }
+
+    /// <summary>
+    /// The conditions at search time, taken from the earliest reading in the forecast: it is at
+    /// most three hours away and costs no extra provider call.
+    /// </summary>
+    private static Search Snapshot(Guid userId, ForecastDto forecast)
+    {
+        var now = forecast.Points.MinBy(p => p.LocalTime);
+
+        return new Search(
+            userId,
+            forecast.City,
+            forecast.Country,
+            forecast.Latitude,
+            forecast.Longitude,
+            conditionMain: Or(now?.Condition, UnknownCondition),
+            description: Or(now?.Description, string.Empty),
+            icon: Or(now?.Icon, string.Empty),
+            temperatureC: now?.TemperatureC ?? 0,
+            humidity: now?.Humidity ?? 0,
+            windSpeed: now?.WindSpeed ?? 0);
+    }
+
+    private static string Or(string? value, string fallback) =>
+        string.IsNullOrWhiteSpace(value) ? fallback : value;
+
+    private static SearchRecordDto ToDto(Search s) => new(
+        s.Id,
+        s.CityName,
+        s.CountryCode,
+        s.Latitude,
+        s.Longitude,
+        s.CreatedAt,
+        s.TemperatureC,
+        s.Humidity,
+        s.WindSpeed,
+        s.ConditionMain,
+        s.Description,
+        s.Icon);
+}

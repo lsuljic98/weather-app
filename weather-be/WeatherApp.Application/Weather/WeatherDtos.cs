@@ -15,6 +15,7 @@ public sealed record ForecastPointDto(
     double WindSpeed,
     double PrecipitationProbability,
     string Condition,
+    string Description,
     string Icon);
 
 public sealed record ForecastDayDto(

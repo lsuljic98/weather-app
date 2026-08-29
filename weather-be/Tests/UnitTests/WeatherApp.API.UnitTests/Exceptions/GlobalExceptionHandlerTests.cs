@@ -36,6 +36,10 @@ public class GlobalExceptionHandlerTests
     public static TheoryData<Exception, int, string, LogLevel> Mappings => new()
     {
         { new WeatherApiException("boom"), 502, "Weather provider unavailable", LogLevel.Error },
+        { new UnauthenticatedException(), 401, "Authentication required", LogLevel.Warning },
+        { new EmailTakenException(), 409, "Email already registered", LogLevel.Warning },
+        { new InvalidCredentialsException(), 401, "Invalid credentials", LogLevel.Warning },
+        { new InvalidRefreshTokenException(), 401, "Invalid refresh token", LogLevel.Warning },
         { new ArgumentException("latitude must be between -90 and 90"), 400, "Invalid request", LogLevel.Warning },
         { new ArgumentOutOfRangeException("latitude"), 400, "Invalid request", LogLevel.Warning },
         { new OperationCanceledException(), 499, "Request cancelled", LogLevel.Warning },

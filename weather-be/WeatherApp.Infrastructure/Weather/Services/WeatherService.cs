@@ -87,6 +87,7 @@ public sealed class WeatherService(IWeatherApiClient client, IMemoryCache cache)
                 WindSpeed: e.Wind.Speed,
                 PrecipitationProbability: e.PrecipitationProbability,
                 Condition: e.Conditions.FirstOrDefault()?.Main ?? string.Empty,
+                Description: e.Conditions.FirstOrDefault()?.Description ?? string.Empty,
                 Icon: e.Conditions.FirstOrDefault()?.Icon ?? string.Empty))
             .ToArray();
 

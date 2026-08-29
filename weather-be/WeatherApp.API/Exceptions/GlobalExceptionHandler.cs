@@ -47,6 +47,26 @@ public sealed class GlobalExceptionHandler(
             "Weather provider unavailable",
             "The upstream weather service could not be reached. Please try again shortly."),
 
+        EmailTakenException => (
+            StatusCodes.Status409Conflict,
+            "Email already registered",
+            "An account with this email already exists."),
+
+        InvalidCredentialsException => (
+            StatusCodes.Status401Unauthorized,
+            "Invalid credentials",
+            "The sign-in details are incorrect."),
+
+        InvalidRefreshTokenException => (
+            StatusCodes.Status401Unauthorized,
+            "Invalid refresh token",
+            "The session has expired or been revoked. Sign in again."),
+
+        UnauthenticatedException => (
+            StatusCodes.Status401Unauthorized,
+            "Authentication required",
+            "Sign in to use this endpoint."),
+
         ArgumentException or ArgumentOutOfRangeException => (
             StatusCodes.Status400BadRequest,
             "Invalid request",

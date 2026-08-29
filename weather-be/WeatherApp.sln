@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApp.Application.Unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApp.API.UnitTests", "Tests\UnitTests\WeatherApp.API.UnitTests\WeatherApp.API.UnitTests.csproj", "{03ABECCC-9F81-44A4-90AF-D80C0C281E48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApp.IntegrationTests", "Tests\IntegrationTests\WeatherApp.IntegrationTests\WeatherApp.IntegrationTests.csproj", "{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,18 @@ Global
 		{03ABECCC-9F81-44A4-90AF-D80C0C281E48}.Release|x64.Build.0 = Release|Any CPU
 		{03ABECCC-9F81-44A4-90AF-D80C0C281E48}.Release|x86.ActiveCfg = Release|Any CPU
 		{03ABECCC-9F81-44A4-90AF-D80C0C281E48}.Release|x86.Build.0 = Release|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Debug|x64.Build.0 = Debug|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Debug|x86.Build.0 = Debug|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Release|x64.ActiveCfg = Release|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Release|x64.Build.0 = Release|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Release|x86.ActiveCfg = Release|Any CPU
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,5 +159,6 @@ Global
 		{B1D0DE20-F1FC-4125-A9A5-09E2F5CE40D3} = {CBDFFE89-3A7F-4DCD-9327-13EEA9E3D506}
 		{0A5A4EF6-D969-45B3-B798-AC9E6FA637E0} = {CBDFFE89-3A7F-4DCD-9327-13EEA9E3D506}
 		{03ABECCC-9F81-44A4-90AF-D80C0C281E48} = {CBDFFE89-3A7F-4DCD-9327-13EEA9E3D506}
+		{25BD4CBD-9013-40B0-BCFC-1F5EDD30952C} = {E648EB5E-5789-4206-A93D-3C5669778534}
 	EndGlobalSection
 EndGlobal
