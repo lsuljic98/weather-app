@@ -1,8 +1,7 @@
 namespace WeatherApp.Application.Abstractions;
 
 /// <summary>
-/// The caller behind the current request. Every user-scoped query takes the id from here,
-/// never from the request body or query string.
+/// The caller behind the current request. Every user-scoped query takes the id from here
 /// </summary>
 public interface ICurrentUser
 {

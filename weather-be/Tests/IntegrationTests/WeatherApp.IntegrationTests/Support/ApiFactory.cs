@@ -9,8 +9,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Testcontainers.PostgreSql;
 using WeatherApp.Application.Auth;
 using WeatherApp.Infrastructure;
+using WeatherApp.Infrastructure.Abstractions;
 using WeatherApp.Infrastructure.UnitTests.Support;
-using WeatherApp.Infrastructure.Weather.Services.Abstractions;
 
 namespace WeatherApp.IntegrationTests.Support;
 

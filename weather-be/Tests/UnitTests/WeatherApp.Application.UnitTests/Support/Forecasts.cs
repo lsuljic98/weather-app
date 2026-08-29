@@ -1,4 +1,4 @@
-using WeatherApp.Application.Weather;
+using WeatherApp.Application.Dtos;
 
 namespace WeatherApp.Application.UnitTests.Support;
 

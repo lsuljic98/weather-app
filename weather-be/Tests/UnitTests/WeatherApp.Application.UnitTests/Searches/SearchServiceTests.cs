@@ -1,4 +1,5 @@
 using Shouldly;
+using WeatherApp.Application.Constants;
 using WeatherApp.Application.Searches;
 using WeatherApp.Application.UnitTests.Support;
 using WeatherApp.Domain.Entities;
@@ -160,7 +161,7 @@ public class SearchServiceTests
 
     [Theory]
     [InlineData(0, 0, 1, 1)]
-    [InlineData(-3, 500, 1, SearchService.MaxPageSize)]
+    [InlineData(-3, 500, 1, SearchHistoryLimits.MaxPageSize)]
     [InlineData(2, 25, 2, 25)]
     public async Task GetHistoryAsync_WhenPagingOutOfRange_ShouldClamp(int page, int pageSize, int expectedPage, int expectedSize)
     {

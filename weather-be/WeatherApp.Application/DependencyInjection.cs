@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Abstractions.Services;
 using WeatherApp.Application.Auth;
 using WeatherApp.Application.Searches;
 using WeatherApp.Application.Statistics;

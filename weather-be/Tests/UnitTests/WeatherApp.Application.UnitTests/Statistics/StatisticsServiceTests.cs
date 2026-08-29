@@ -1,4 +1,5 @@
 using Shouldly;
+using WeatherApp.Application.Constants;
 using WeatherApp.Application.Statistics;
 using WeatherApp.Application.UnitTests.Support;
 using WeatherApp.Domain.Entities;
@@ -33,7 +34,7 @@ public class StatisticsServiceTests
     [InlineData(0, 1)]
     [InlineData(-5, 1)]
     [InlineData(3, 3)]
-    [InlineData(500, StatisticsService.MaxTake)]
+    [InlineData(500, StatisticsLimits.MaxTake)]
     public async Task GetTopCitiesAsync_ShouldClampTake(int requested, int expected)
     {
         await _sut.GetTopCitiesAsync(UserId, requested);
@@ -62,7 +63,7 @@ public class StatisticsServiceTests
     {
         await _sut.GetRecentAsync(UserId, take: 999);
 
-        _repo.PageRequests.ShouldBe([(1, StatisticsService.MaxTake)]);
+        _repo.PageRequests.ShouldBe([(1, StatisticsLimits.MaxTake)]);
     }
 
     [Fact]

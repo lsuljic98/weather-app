@@ -1,7 +1,6 @@
-using WeatherApp.Application.Searches;
-using WeatherApp.Application.Weather;
+using WeatherApp.Application.Dtos;
 
-namespace WeatherApp.Application.Abstractions;
+namespace WeatherApp.Application.Abstractions.Services;
 
 /// <summary>
 /// A forecast search: fetching the forecast and recording that the user searched for it are
@@ -9,14 +8,11 @@ namespace WeatherApp.Application.Abstractions;
 /// </summary>
 public interface ISearchService
 {
-    /// <summary>
-    /// The forecast for the city, recorded against <paramref name="userId"/>. Null (and nothing
-    /// recorded) if the city cannot be matched to a place.
-    /// </summary>
+    /// <summary>The city's forecast, recorded as a search of the user. Null, and nothing recorded, if the city is unknown.</summary>
     Task<ForecastDto?> SearchForecastAsync(
         Guid userId, string city, string? countryCode = null, CancellationToken ct = default);
 
-    /// <summary>The user's past searches, newest first, read from the database rather than any cache.</summary>
+    /// <summary>One page of the user's past searches, newest first. Always read from the database, never a cache.</summary>
     Task<PagedResult<SearchRecordDto>> GetHistoryAsync(
         Guid userId, int page, int pageSize, CancellationToken ct = default);
 }

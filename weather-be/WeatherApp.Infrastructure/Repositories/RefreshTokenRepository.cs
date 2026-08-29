@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Abstractions.Repositories;
 using WeatherApp.Domain.Entities;
 
 namespace WeatherApp.Infrastructure.Repositories;

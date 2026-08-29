@@ -1,5 +1,5 @@
+using WeatherApp.Infrastructure.Abstractions;
 using WeatherApp.Infrastructure.Weather.Responses;
-using WeatherApp.Infrastructure.Weather.Services.Abstractions;
 
 namespace WeatherApp.Infrastructure.UnitTests.Support;
 

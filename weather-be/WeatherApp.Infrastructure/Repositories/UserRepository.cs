@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Abstractions.Repositories;
 using WeatherApp.Application.Exceptions;
 using WeatherApp.Domain.Entities;
 

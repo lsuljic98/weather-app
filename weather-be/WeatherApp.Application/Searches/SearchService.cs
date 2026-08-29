@@ -1,14 +1,14 @@
-using WeatherApp.Application.Abstractions;
-using WeatherApp.Application.Weather;
+using WeatherApp.Application.Abstractions.Repositories;
+using WeatherApp.Application.Abstractions.Services;
+using WeatherApp.Application.Constants;
+using WeatherApp.Application.Dtos;
 using WeatherApp.Domain.Entities;
 
 namespace WeatherApp.Application.Searches;
 
 public sealed class SearchService(IWeatherService weather, ISearchRepository searches) : ISearchService
 {
-    public const int MaxPageSize = 100;
-
-    // Used when the provider sends a reading without a condition, so the row is still written.
+    // Used when the provider sends a reading without a condition
     private const string UnknownCondition = "Unknown";
 
     public async Task<ForecastDto?> SearchForecastAsync(
@@ -27,7 +27,7 @@ public sealed class SearchService(IWeatherService weather, ISearchRepository sea
         Guid userId, int page, int pageSize, CancellationToken ct = default)
     {
         page = Math.Max(page, 1);
-        pageSize = Math.Clamp(pageSize, 1, MaxPageSize);
+        pageSize = Math.Clamp(pageSize, 1, SearchHistoryLimits.MaxPageSize);
 
         var total = await searches.CountAsync(userId, ct);
         var rows = total == 0

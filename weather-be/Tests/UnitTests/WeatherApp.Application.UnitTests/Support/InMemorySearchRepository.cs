@@ -1,4 +1,4 @@
-using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Abstractions.Repositories;
 using WeatherApp.Application.Statistics;
 using WeatherApp.Domain.Entities;
 

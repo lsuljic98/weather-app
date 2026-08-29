@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Caching.Memory;
-using WeatherApp.Application.Abstractions;
-using WeatherApp.Application.Weather;
+using WeatherApp.Application.Abstractions.Services;
+using WeatherApp.Application.Dtos;
+using WeatherApp.Infrastructure.Abstractions;
 using WeatherApp.Infrastructure.Weather.Responses;
-using WeatherApp.Infrastructure.Weather.Services.Abstractions;
 
 namespace WeatherApp.Infrastructure.Weather.Services;
 

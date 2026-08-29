@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WeatherApp.API.Auth;
 using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Abstractions.Services;
 using WeatherApp.Application.Auth;
 using WeatherApp.Application.Exceptions;
 

@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Shouldly;
-using WeatherApp.Application.Searches;
+using WeatherApp.Application.Dtos;
 using WeatherApp.Application.Statistics;
 using WeatherApp.Infrastructure.UnitTests.Support;
 using WeatherApp.Infrastructure.Weather.Responses;

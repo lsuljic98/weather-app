@@ -1,8 +1,10 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using WeatherApp.Application.Abstractions;
-using WeatherApp.Application.Searches;
+using WeatherApp.Application.Abstractions.Services;
+using WeatherApp.Application.Constants;
+using WeatherApp.Application.Dtos;
 
 namespace WeatherApp.API.Controllers;
 
@@ -19,7 +21,7 @@ public sealed class SearchesController(ISearchService searchService, ICurrentUse
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<PagedResult<SearchRecordDto>>> GetHistory(
         [FromQuery, Range(1, int.MaxValue)] int page = 1,
-        [FromQuery, Range(1, SearchService.MaxPageSize)] int pageSize = 20,
+        [FromQuery, Range(1, SearchHistoryLimits.MaxPageSize)] int pageSize = SearchHistoryLimits.DefaultPageSize,
         CancellationToken ct = default)
         => Ok(await searchService.GetHistoryAsync(currentUser.UserId, page, pageSize, ct));
 }

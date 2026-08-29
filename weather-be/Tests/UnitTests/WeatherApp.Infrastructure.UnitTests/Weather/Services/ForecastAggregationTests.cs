@@ -1,5 +1,5 @@
 using Shouldly;
-using WeatherApp.Application.Weather;
+using WeatherApp.Application.Dtos;
 using WeatherApp.Infrastructure.UnitTests.Support;
 using WeatherApp.Infrastructure.Weather.Responses;
 

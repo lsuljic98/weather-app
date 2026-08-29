@@ -3,13 +3,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Abstractions.Repositories;
+using WeatherApp.Application.Abstractions.Services;
 using WeatherApp.Application.Auth;
-using WeatherApp.Application.Weather;
+using WeatherApp.Infrastructure.Abstractions;
 using WeatherApp.Infrastructure.Auth;
 using WeatherApp.Infrastructure.Repositories;
 using WeatherApp.Infrastructure.Weather;
 using WeatherApp.Infrastructure.Weather.Services;
-using WeatherApp.Infrastructure.Weather.Services.Abstractions;
 
 namespace WeatherApp.Infrastructure;
 

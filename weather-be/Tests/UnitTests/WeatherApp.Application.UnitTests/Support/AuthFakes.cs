@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Options;
 using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Abstractions.Repositories;
 using WeatherApp.Application.Auth;
+using WeatherApp.Application.Enums;
 using WeatherApp.Application.Exceptions;
 using WeatherApp.Domain.Entities;
 

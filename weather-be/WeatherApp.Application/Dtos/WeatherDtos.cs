@@ -1,4 +1,4 @@
-namespace WeatherApp.Application.Weather;
+namespace WeatherApp.Application.Dtos;
 
 public sealed record ForecastDto(
     string City,

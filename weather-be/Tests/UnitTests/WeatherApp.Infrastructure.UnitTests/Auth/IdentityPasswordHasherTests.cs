@@ -1,5 +1,5 @@
 using Shouldly;
-using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Enums;
 using WeatherApp.Infrastructure.Auth;
 
 namespace WeatherApp.Infrastructure.UnitTests.Auth;

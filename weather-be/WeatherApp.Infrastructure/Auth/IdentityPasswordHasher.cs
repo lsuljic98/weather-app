@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using WeatherApp.Application.Abstractions;
+using WeatherApp.Application.Enums;
 
 namespace WeatherApp.Infrastructure.Auth;
 

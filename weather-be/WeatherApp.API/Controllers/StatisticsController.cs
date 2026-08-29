@@ -1,8 +1,10 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using WeatherApp.Application.Abstractions;
-using WeatherApp.Application.Searches;
+using WeatherApp.Application.Abstractions.Services;
+using WeatherApp.Application.Constants;
+using WeatherApp.Application.Dtos;
 using WeatherApp.Application.Statistics;
 
 namespace WeatherApp.API.Controllers;
@@ -21,7 +23,7 @@ public sealed class StatisticsController(IStatisticsService statistics, ICurrent
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<IReadOnlyList<TopCityDto>>> GetTopCities(
-        [FromQuery, Range(1, StatisticsService.MaxTake)] int take = StatisticsService.DefaultTake,
+        [FromQuery, Range(1, StatisticsLimits.MaxTake)] int take = StatisticsLimits.DefaultTake,
         CancellationToken ct = default)
         => Ok(await statistics.GetTopCitiesAsync(currentUser.UserId, take, ct));
 
@@ -32,7 +34,7 @@ public sealed class StatisticsController(IStatisticsService statistics, ICurrent
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<IReadOnlyList<SearchRecordDto>>> GetRecent(
-        [FromQuery, Range(1, StatisticsService.MaxTake)] int take = StatisticsService.DefaultTake,
+        [FromQuery, Range(1, StatisticsLimits.MaxTake)] int take = StatisticsLimits.DefaultTake,
         CancellationToken ct = default)
         => Ok(await statistics.GetRecentAsync(currentUser.UserId, take, ct));
 

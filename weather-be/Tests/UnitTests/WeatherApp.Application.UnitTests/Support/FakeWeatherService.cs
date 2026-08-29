@@ -1,5 +1,5 @@
-using WeatherApp.Application.Abstractions;
-using WeatherApp.Application.Weather;
+using WeatherApp.Application.Abstractions.Services;
+using WeatherApp.Application.Dtos;
 
 namespace WeatherApp.Application.UnitTests.Support;
 

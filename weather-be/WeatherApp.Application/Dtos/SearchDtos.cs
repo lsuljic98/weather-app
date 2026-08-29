@@ -1,6 +1,6 @@
 using WeatherApp.Domain.Entities;
 
-namespace WeatherApp.Application.Searches;
+namespace WeatherApp.Application.Dtos;
 
 public sealed record SearchRecordDto(
     Guid Id,
@@ -29,17 +29,4 @@ public sealed record SearchRecordDto(
         s.ConditionMain,
         s.Description,
         s.Icon);
-}
-
-public sealed record PagedResult<T>(
-    IReadOnlyList<T> Items,
-    int Page,
-    int PageSize,
-    int TotalCount)
-{
-    public int TotalPages => TotalCount == 0 ? 0 : (int)Math.Ceiling(TotalCount / (double)PageSize);
-
-    public bool HasNext => Page < TotalPages;
-
-    public bool HasPrevious => Page > 1;
 }

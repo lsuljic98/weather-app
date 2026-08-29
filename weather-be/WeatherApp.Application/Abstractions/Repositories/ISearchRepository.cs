@@ -1,9 +1,9 @@
 using WeatherApp.Application.Statistics;
 using WeatherApp.Domain.Entities;
 
-namespace WeatherApp.Application.Abstractions;
+namespace WeatherApp.Application.Abstractions.Repositories;
 
-/// <summary>Stores a user's forecast searches and reads them back as history.</summary>
+/// <summary>Stores a user's forecast searches; reads them back as history and as aggregates.</summary>
 public interface ISearchRepository
 {
     Task AddAsync(Search search, CancellationToken ct = default);
@@ -13,12 +13,9 @@ public interface ISearchRepository
 
     Task<int> CountAsync(Guid userId, CancellationToken ct = default);
 
-    /// <summary>
-    /// The user's most searched (city, country) pairs, most frequent first; ties break on city
-    /// name so the order is stable. Aggregated in the database.
-    /// </summary>
+    /// <summary>The user's most searched (city, country) pairs, most frequent first; ties break on city name.</summary>
     Task<IReadOnlyList<TopCityDto>> GetTopCitiesAsync(Guid userId, int take, CancellationToken ct = default);
 
-    /// <summary>Search count per condition group for the user, largest first. Aggregated in the database.</summary>
+    /// <summary>The user's search count per condition group, largest first.</summary>
     Task<IReadOnlyList<ConditionCountDto>> GetConditionCountsAsync(Guid userId, CancellationToken ct = default);
 }
