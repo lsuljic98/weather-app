@@ -30,11 +30,12 @@ services:
       ConnectionStrings__Default: "Host=db;Port=5432;Database=${POSTGRES_DB:-weatherapp};Username=${POSTGRES_USER:-weatherapp};Password=${POSTGRES_PASSWORD}"
       WeatherServiceConfiguration__ApiKey: ${OPENWEATHER_API_KEY:?set OPENWEATHER_API_KEY in .env}
       WeatherServiceConfiguration__BaseUrl: "https://api.openweathermap.org"
-      Jwt__Key: ${JWT_KEY:?set JWT_KEY in .env}
-      Jwt__Issuer: ${JWT_ISSUER:-weather-api}
-      Jwt__Audience: ${JWT_AUDIENCE:-weather-web}
-      Jwt__AccessTokenMinutes: ${JWT_ACCESS_MINUTES:-15}
-      Jwt__RefreshTokenDays: ${JWT_REFRESH_DAYS:-7}
+      Auth__Key: ${JWT_KEY:?set JWT_KEY in .env}
+      Auth__Issuer: ${JWT_ISSUER:-weather-api}
+      Auth__Audience: ${JWT_AUDIENCE:-weather-web}
+      Auth__AccessTokenMinutes: ${JWT_ACCESS_MINUTES:-15}
+      Auth__RefreshTokenDays: ${JWT_REFRESH_DAYS:-7}
+      Auth__SecureCookie: "false" # plain HTTP behind nginx locally
       ApplyMigrationsOnStartup: "true"
     ports:
       - "${API_PORT:-8080}:8080"

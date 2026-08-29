@@ -40,8 +40,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         await _postgres.StartAsync();
 
-        using var scope = Services.CreateScope();
-        await scope.ServiceProvider.GetRequiredService<WeatherDbContext>().Database.MigrateAsync();
+        // Builds the host, which runs the startup migration path (ApplyMigrationsOnStartup below).
+        _ = Services;
     }
 
     public new async Task DisposeAsync()
@@ -57,6 +57,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         builder.UseSetting("WeatherServiceConfiguration:ApiKey", "integration-test-key");
         builder.UseSetting("Auth:Key", JwtKey);
         builder.UseSetting("Auth:SecureCookie", "false"); // the test server is plain HTTP
+        builder.UseSetting("ApplyMigrationsOnStartup", "true");
 
         builder.ConfigureTestServices(services =>
         {

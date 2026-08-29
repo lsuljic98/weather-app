@@ -43,6 +43,10 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+// Explicit opt-in (true in compose and Development). Off, the schema is managed with dotnet-ef.
+if (app.Configuration.GetValue<bool>("ApplyMigrationsOnStartup"))
+    await DatabaseMigrator.MigrateAsync(app.Services, app.Lifetime.ApplicationStopping);
+
 app.UseExceptionHandler();
 app.UseStatusCodePages(); // ProblemDetails body for bodyless 401/403/404s too
 
@@ -63,7 +67,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
 
 // Exposes the entry point to WebApplicationFactory in the integration tests.
 public partial class Program;

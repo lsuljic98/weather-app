@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "weather-db (compose)",
+      "Group": "Servers",
+      "Host": "db",
+      "Port": 5432,
+      "MaintenanceDB": "weatherapp",
+      "Username": "weatherapp",
+      "SSLMode": "prefer"
+    }
+  }
+}
