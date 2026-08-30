@@ -1,24 +1,10 @@
 import { api } from './client'
+import type { SearchRecord } from './searches'
 
 export interface TopCity {
   city: string
   country: string
   count: number
-}
-
-export interface SearchRecord {
-  id: string
-  city: string
-  country: string
-  latitude: number
-  longitude: number
-  searchedAt: string
-  temperatureC: number
-  humidity: number
-  windSpeed: number
-  condition: string
-  description: string
-  icon: string
 }
 
 export interface ConditionCount {

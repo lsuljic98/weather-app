@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 
 const tabs = [
   { to: '/', label: 'Search' },
+  { to: '/history', label: 'History' },
   { to: '/statistics', label: 'Statistics' },
 ]
 

@@ -3,6 +3,7 @@ import { ProtectedRoute } from './auth/ProtectedRoute'
 import { LoginPage } from './features/auth/LoginPage'
 import { RegisterPage } from './features/auth/RegisterPage'
 import { SearchPage } from './features/forecast/SearchPage'
+import { HistoryPage } from './features/history/HistoryPage'
 import { StatisticsPage } from './features/statistics/StatisticsPage'
 import { AppShell } from './layouts/AppShell'
 
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
         element: <AppShell />,
         children: [
           { path: '/', element: <SearchPage /> },
+          { path: '/history', element: <HistoryPage /> },
           { path: '/statistics', element: <StatisticsPage /> },
         ],
       },
