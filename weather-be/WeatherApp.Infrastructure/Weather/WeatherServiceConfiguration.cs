@@ -6,7 +6,7 @@ public sealed class WeatherServiceConfiguration
 {
     public const string SectionName = "WeatherServiceConfiguration";
 
-    /// <summary>Host only, no trailing path. Endpoint paths are appended by the client.</summary>
+    /// <summary>Host only, no trailing path. The client appends endpoint paths.</summary>
     [Required(AllowEmptyStrings = false)]
     [Url]
     public string BaseUrl { get; init; } = string.Empty;

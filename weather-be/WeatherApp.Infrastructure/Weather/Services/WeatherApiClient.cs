@@ -35,7 +35,6 @@ public sealed class WeatherApiClient(
         SendAsync<CurrentWeatherResponse>(BuildWeatherUri("data/2.5/weather", latitude, longitude), ct);
 
     private string BuildWeatherUri(string path, double latitude, double longitude) =>
-        // Invariant: a comma decimal separator produces a malformed query.
         FormattableString.Invariant(
             $"{path}?lat={latitude}&lon={longitude}&units=metric&appid={_apiKey}");
 

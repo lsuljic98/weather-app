@@ -37,7 +37,6 @@ public sealed class WeatherService(IWeatherApiClient client, IMemoryCache cache)
         var condition = current.Conditions.FirstOrDefault();
 
         return new CurrentWeatherDto(
-            // The geocoded name; the weather endpoint echoes a coarser station name.
             City: location.Name,
             Country: location.Country,
             Latitude: location.Latitude,
@@ -102,7 +101,6 @@ public sealed class WeatherService(IWeatherApiClient client, IMemoryCache cache)
 
     private static ForecastDayDto Summarise(DateOnly date, ForecastEntry[] entries, int offset)
     {
-        // Nearest local midday; the modal condition would skew clear from night entries.
         var midday = entries.MinBy(e => Math.Abs((e.LocalTime(offset).TimeOfDay - TimeSpan.FromHours(12)).Ticks))!;
         var condition = midday.Conditions.FirstOrDefault();
 
