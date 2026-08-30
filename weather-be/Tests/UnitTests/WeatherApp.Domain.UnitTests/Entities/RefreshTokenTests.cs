@@ -3,7 +3,7 @@ using WeatherApp.Domain.Entities;
 
 namespace WeatherApp.Domain.UnitTests.Entities;
 
-/// <summary>Suite E: RefreshToken lifecycle and BaseEntity identity.</summary>
+/// <summary>RefreshToken lifecycle and BaseEntity identity.</summary>
 public class RefreshTokenTests
 {
     private static readonly DateTimeOffset Now = new(2026, 8, 28, 12, 0, 0, TimeSpan.Zero);

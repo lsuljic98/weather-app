@@ -5,7 +5,7 @@ using WeatherApp.Infrastructure.Weather.Responses;
 
 namespace WeatherApp.Infrastructure.UnitTests.Weather.Services;
 
-/// <summary>Suite A: WeatherService.GetForecastAsync → Days / Points.</summary>
+/// <summary>WeatherService.GetForecastAsync → Days / Points.</summary>
 public class ForecastAggregationTests
 {
     private const double Tolerance = 0.005;

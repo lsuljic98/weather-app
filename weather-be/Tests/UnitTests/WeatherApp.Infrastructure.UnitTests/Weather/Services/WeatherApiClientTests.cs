@@ -9,7 +9,7 @@ using WeatherApp.Infrastructure.UnitTests.Support;
 
 namespace WeatherApp.Infrastructure.UnitTests.Weather.Services;
 
-/// <summary>Suite B: WeatherApiClient error mapping and URI building.</summary>
+/// <summary>WeatherApiClient error mapping and URI building.</summary>
 public class WeatherApiClientTests
 {
     private const string EmptyForecast = """{"city":{"name":"Z","country":"HR","timezone":0},"list":[]}""";

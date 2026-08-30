@@ -5,7 +5,7 @@ using WeatherApp.Infrastructure.Weather.Responses;
 
 namespace WeatherApp.Infrastructure.UnitTests.Weather.Services;
 
-/// <summary>Suite F: WeatherService caching and city resolution.</summary>
+/// <summary>WeatherService caching and city resolution.</summary>
 public class WeatherServiceCachingTests
 {
     private static FakeWeatherApiClient ZagrebClient() => new()

@@ -5,7 +5,7 @@ using WeatherApp.Infrastructure.Weather.Responses;
 
 namespace WeatherApp.Infrastructure.UnitTests.Weather.Responses;
 
-/// <summary>Suite C: the response records against captured provider payloads.</summary>
+/// <summary>The response records against captured provider payloads.</summary>
 public class ResponseDeserializationTests
 {
     [Fact]

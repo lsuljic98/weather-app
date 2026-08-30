@@ -23,7 +23,7 @@ public class JwtAccessTokenIssuerTests
         new(Microsoft.Extensions.Options.Options.Create(options ?? Options));
 
     [Fact]
-    public async Task Issue_ShouldProduceHs256TokenWithPlannedClaimsAndExpiry()
+    public async Task Issue_ShouldProduceHs256TokenWithExpectedClaimsAndExpiry()
     {
         var user = new User("leon@example.com", "hash");
 

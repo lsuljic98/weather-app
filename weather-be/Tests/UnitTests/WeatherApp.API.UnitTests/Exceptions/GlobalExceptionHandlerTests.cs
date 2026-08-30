@@ -9,7 +9,7 @@ using WeatherApp.Application.Exceptions;
 
 namespace WeatherApp.API.UnitTests.Exceptions;
 
-/// <summary>Suite D: GlobalExceptionHandler through the real ProblemDetails writer.</summary>
+/// <summary>GlobalExceptionHandler through the real ProblemDetails writer.</summary>
 public class GlobalExceptionHandlerTests
 {
     private sealed record Outcome(bool Handled, HttpContext Context, JsonElement Body, FakeLogger<GlobalExceptionHandler> Logger);
