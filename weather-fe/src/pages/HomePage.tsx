@@ -1,3 +1,4 @@
+import { CurrentWeatherWidget } from '../features/current-widget/CurrentWeatherWidget'
 import { useAuth } from '../hooks/useAuth'
 
 export function HomePage() {
@@ -19,7 +20,9 @@ export function HomePage() {
         </div>
       </header>
 
-      <p className="mt-8 text-slate-500">Current weather widget goes here.</p>
+      <div className="mt-8 max-w-sm">
+        <CurrentWeatherWidget />
+      </div>
     </main>
   )
 }

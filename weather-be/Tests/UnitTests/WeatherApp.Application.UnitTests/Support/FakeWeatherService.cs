@@ -16,6 +16,9 @@ public sealed class FakeWeatherService : IWeatherService
     public Task<CurrentWeatherDto?> GetCurrentAsync(string city, string? countryCode = null, CancellationToken ct = default) =>
         Task.FromResult<CurrentWeatherDto?>(null);
 
+    public Task<CurrentWeatherDto?> GetCurrentAsync(double latitude, double longitude, CancellationToken ct = default) =>
+        Task.FromResult<CurrentWeatherDto?>(null);
+
     public Task<ForecastDto?> GetForecastAsync(string city, string? countryCode = null, CancellationToken ct = default)
     {
         ForecastCalls++;

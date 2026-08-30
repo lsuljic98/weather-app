@@ -27,20 +27,39 @@ public sealed class WeatherService(IWeatherApiClient client, IMemoryCache cache)
         if (location is null)
             return null;
 
-        var current = await GetOrCreateAsync(
-            $"current:{Key(location)}", WeatherTtl,
-            token => client.GetCurrentAsync(location.Latitude, location.Longitude, token), ct);
+        var current = await GetCurrentCachedAsync(location.Latitude, location.Longitude, ct);
 
-        if (current is null)
-            return null;
+        return current is null
+            ? null
+            : ToDto(current, location.Name, location.Country, location.Latitude, location.Longitude);
+    }
 
+    public async Task<CurrentWeatherDto?> GetCurrentAsync(
+        double latitude, double longitude, CancellationToken ct = default)
+    {
+        var current = await GetCurrentCachedAsync(latitude, longitude, ct);
+
+        // No geocoding step here, so the place name comes from the weather reading itself.
+        return current is null
+            ? null
+            : ToDto(current, current.Name, current.Sys.Country ?? string.Empty, latitude, longitude);
+    }
+
+    private Task<CurrentWeatherResponse?> GetCurrentCachedAsync(double latitude, double longitude, CancellationToken ct) =>
+        GetOrCreateAsync(
+            $"current:{Key(latitude, longitude)}", WeatherTtl,
+            token => client.GetCurrentAsync(latitude, longitude, token), ct);
+
+    private static CurrentWeatherDto ToDto(
+        CurrentWeatherResponse current, string city, string country, double latitude, double longitude)
+    {
         var condition = current.Conditions.FirstOrDefault();
 
         return new CurrentWeatherDto(
-            City: location.Name,
-            Country: location.Country,
-            Latitude: location.Latitude,
-            Longitude: location.Longitude,
+            City: city,
+            Country: country,
+            Latitude: latitude,
+            Longitude: longitude,
             TemperatureC: current.Main.TemperatureC,
             FeelsLikeC: current.Main.FeelsLikeC,
             Humidity: current.Main.Humidity,
@@ -59,7 +78,7 @@ public sealed class WeatherService(IWeatherApiClient client, IMemoryCache cache)
             return null;
 
         var forecast = await GetOrCreateAsync(
-            $"forecast:{Key(location)}", WeatherTtl,
+            $"forecast:{Key(location.Latitude, location.Longitude)}", WeatherTtl,
             token => client.GetForecastAsync(location.Latitude, location.Longitude, token), ct);
 
         if (forecast is null)
@@ -137,8 +156,8 @@ public sealed class WeatherService(IWeatherApiClient client, IMemoryCache cache)
     }
 
     // Rounded to ~1km so nearby coordinates share one API call.
-    private static string Key(GeocodingResponse location) =>
-        FormattableString.Invariant($"{location.Latitude:F2}:{location.Longitude:F2}");
+    private static string Key(double latitude, double longitude) =>
+        FormattableString.Invariant($"{latitude:F2}:{longitude:F2}");
 
     /// <summary>
     /// Caches the result of a factory function. Used to avoid redundant API calls.

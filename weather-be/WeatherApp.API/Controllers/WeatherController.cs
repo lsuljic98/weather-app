@@ -1,5 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using WeatherApp.Application.Abstractions;
 using WeatherApp.Application.Abstractions.Services;
 using WeatherApp.Application.Dtos;
@@ -31,6 +33,20 @@ public sealed class WeatherController(
         CancellationToken ct)
     {
         var current = await weatherService.GetCurrentAsync(city, countryCode, ct);
+        return current is null ? NotFound() : Ok(current);
+    }
+
+    /// <summary>Current conditions at a coordinate — the "where am I" widget. Not recorded as a search.</summary>
+    [HttpGet("current/coordinates")]
+    [ProducesResponseType<CurrentWeatherDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CurrentWeatherDto>> GetCurrentAtCoordinates(
+        [FromQuery, BindRequired, Range(-90.0, 90.0)] double lat,
+        [FromQuery, BindRequired, Range(-180.0, 180.0)] double lon,
+        CancellationToken ct)
+    {
+        var current = await weatherService.GetCurrentAsync(lat, lon, ct);
         return current is null ? NotFound() : Ok(current);
     }
 

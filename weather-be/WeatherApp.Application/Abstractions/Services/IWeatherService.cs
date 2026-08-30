@@ -11,6 +11,9 @@ public interface IWeatherService
     /// <summary>The conditions right now. Null if the city is unknown.</summary>
     Task<CurrentWeatherDto?> GetCurrentAsync(string city, string? countryCode = null, CancellationToken ct = default);
 
+    /// <summary>The conditions right now at a coordinate. Null if the provider has no data for it.</summary>
+    Task<CurrentWeatherDto?> GetCurrentAsync(double latitude, double longitude, CancellationToken ct = default);
+
     /// <summary>Five days as daily summaries plus the three-hour readings behind them. Null if the city is unknown.</summary>
     Task<ForecastDto?> GetForecastAsync(string city, string? countryCode = null, CancellationToken ct = default);
 }

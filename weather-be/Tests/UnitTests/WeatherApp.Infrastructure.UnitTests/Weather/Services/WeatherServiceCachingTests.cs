@@ -122,6 +122,84 @@ public class WeatherServiceCachingTests
     }
 
     [Fact]
+    public async Task GetCurrentAsync_WhenCoordinatesGiven_ShouldSkipGeocodingAndUseProviderPlaceName()
+    {
+        var client = ZagrebClient();
+
+        var dto = (await Make.Service(client).GetCurrentAsync(45.8426, 15.9622)).ShouldNotBeNull();
+
+        client.SearchCalls.ShouldBe(0);
+        client.CurrentCalls.ShouldBe(1);
+        dto.City.ShouldBe("Britanski trg"); // the fixture's station name, no geocoder to override it
+        dto.Country.ShouldBe("HR");
+        (dto.Latitude, dto.Longitude).ShouldBe((45.8426, 15.9622));
+        dto.TemperatureC.ShouldBe(35.72);
+        (dto.Condition, dto.Description, dto.Icon).ShouldBe(("Clouds", "few clouds", "02d"));
+    }
+
+    [Fact]
+    public async Task GetCurrentAsync_WhenCoordinatesMatchAGeocodedCity_ShouldShareTheWeatherCache()
+    {
+        var client = ZagrebClient();
+        var service = Make.Service(client);
+
+        await service.GetCurrentAsync("Zagreb");
+        await service.GetCurrentAsync(45.8449, 15.9601); // rounds to the same ~1km key
+
+        client.CurrentCalls.ShouldBe(1);
+    }
+
+    [Fact]
+    public async Task GetCurrentAsync_WhenCoordinatesGivenAndProviderOmitsCountry_ShouldFallBackToEmptyString()
+    {
+        var client = ZagrebClient();
+        var reading = Fixture.Load<CurrentWeatherResponse>(Fixture.Current);
+        client.Current = reading with { Sys = new CurrentWeatherSys(Country: null) };
+
+        var dto = (await Make.Service(client).GetCurrentAsync(45.8426, 15.9622)).ShouldNotBeNull();
+
+        dto.Country.ShouldBe(string.Empty);
+        dto.City.ShouldBe("Britanski trg");
+    }
+
+    [Fact]
+    public async Task GetCurrentAsync_WhenCoordinatesGivenAndProviderReturnsNull_ShouldReturnNullAndNotCacheTheMiss()
+    {
+        var client = ZagrebClient();
+        client.Current = null;
+        var service = Make.Service(client);
+
+        (await service.GetCurrentAsync(0.0, 0.0)).ShouldBeNull();
+        (await service.GetCurrentAsync(0.0, 0.0)).ShouldBeNull();
+
+        client.SearchCalls.ShouldBe(0);
+        client.CurrentCalls.ShouldBe(2);
+    }
+
+    [Fact]
+    public async Task GetCurrentAsync_WhenCoordinatesRoundToDifferentKeys_ShouldCallProviderForEach()
+    {
+        var client = ZagrebClient();
+        var service = Make.Service(client);
+
+        await service.GetCurrentAsync(45.8426, 15.9622);
+        await service.GetCurrentAsync(45.8526, 15.9622); // 0.01° ≈ 1km north, a different key
+
+        client.CurrentCalls.ShouldBe(2);
+    }
+
+    [Fact]
+    public async Task GetCurrentAsync_WhenCoordinatesGivenWithToken_ShouldPassItToClient()
+    {
+        var client = ZagrebClient();
+        using var cts = new CancellationTokenSource();
+
+        await Make.Service(client).GetCurrentAsync(45.8426, 15.9622, cts.Token);
+
+        client.LastToken.ShouldBe(cts.Token);
+    }
+
+    [Fact]
     public async Task GetForecastAsync_WhenCacheHasSizeLimit_ShouldStillCacheEntries()
     {
         var service = Make.Service(ZagrebClient(), new MemoryCacheOptions { SizeLimit = 1000 });
