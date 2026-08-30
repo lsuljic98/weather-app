@@ -7,7 +7,7 @@ import { ApiError } from '../../api/client'
 import { useAuth } from '../../hooks/useAuth'
 import { ErrorAlert } from '../../components/ErrorAlert'
 import { Field } from '../../components/Field'
-import { SubmitButton } from '../../components/SubmitButton'
+import { Button } from '../../components/Button'
 import { AuthCard } from './AuthCard'
 
 // Mirrors RegisterRequest on the server: email ≤ 320, password 8–128.
@@ -72,9 +72,9 @@ export function RegisterPage() {
           {...register('password')}
         />
         <ErrorAlert message={serverError} />
-        <SubmitButton pending={isSubmitting} pendingLabel="Creating…">
-          Create account
-        </SubmitButton>
+        <Button type="submit" variant="primary" disabled={isSubmitting} className="w-full">
+          {isSubmitting ? 'Creating…' : 'Create account'}
+        </Button>
       </form>
     </AuthCard>
   )

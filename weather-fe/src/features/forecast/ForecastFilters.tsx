@@ -6,7 +6,7 @@ import {
   PARTS_OF_DAY,
   type ForecastFilters as Filters,
 } from './filters'
-import { weekday } from './format'
+import { weekday } from '../../lib/format'
 
 interface ForecastFiltersProps {
   days: ForecastDay[]
@@ -23,13 +23,13 @@ export function ForecastFilters({ days, filters, onChange }: ForecastFiltersProp
       <Select
         label="From"
         value={filters.from ?? first ?? ''}
-        onChange={(v) => onChange({ from: v === first ? undefined : v, ...(filters.to && v > filters.to ? { to: v } : {}) })}
+        onChange={(v) => onChange({ from: v === first ? undefined : v, to: clampTo(filters.to, v) })}
         options={days.map((d) => [d.date, weekday(d.date)])}
       />
       <Select
         label="To"
         value={filters.to ?? last ?? ''}
-        onChange={(v) => onChange({ to: v === last ? undefined : v, ...(filters.from && v < filters.from ? { from: v } : {}) })}
+        onChange={(v) => onChange({ to: v === last ? undefined : v, from: clampFrom(filters.from, v) })}
         options={days.map((d) => [d.date, weekday(d.date)])}
       />
       <Select
@@ -56,6 +56,10 @@ export function ForecastFilters({ days, filters, onChange }: ForecastFiltersProp
     </div>
   )
 }
+
+// Keep the range ordered when one end is dragged past the other.
+const clampTo = (to: string | undefined, from: string) => (to && from > to ? from : to)
+const clampFrom = (from: string | undefined, to: string) => (from && to < from ? to : from)
 
 interface SelectProps {
   label: string

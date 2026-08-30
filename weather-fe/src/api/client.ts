@@ -1,7 +1,5 @@
 import type { TokenResponse } from './auth'
 
-
-// Thin fetch wrapper. Injects the in-memory bearer token.
 export class ApiError extends Error {
   readonly status: number
   readonly problem?: ProblemDetails
@@ -41,6 +39,7 @@ interface RequestOptions extends Omit<RequestInit, 'body'> {
   skipAuthRetry?: boolean
 }
 
+// Adds the bearer token; on a 401 refreshes the session once and retries.
 export async function api<T>(
   path: string,
   { body, skipAuthRetry = false, ...init }: RequestOptions = {},

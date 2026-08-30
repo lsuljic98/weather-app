@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
 import type { City, CityRef } from '../../api/weather'
 import { useCitySearch } from '../../hooks/useCitySearch'
 
@@ -37,7 +37,7 @@ export function CitySearch({ onSelect }: CitySearchProps) {
     if (city) commit({ city }, city)
   }
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()

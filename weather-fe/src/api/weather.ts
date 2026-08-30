@@ -20,11 +20,6 @@ export interface Coordinates {
   longitude: number
 }
 
-export const weatherApi = {
-  currentAt: ({ latitude, longitude }: Coordinates) =>
-    api<CurrentWeather>(`/weather/current/coordinates?lat=${latitude}&lon=${longitude}`),
-}
-
 export interface City {
   name: string
   state: string | null
@@ -72,12 +67,13 @@ export interface CityRef {
   countryCode?: string
 }
 
-export const citiesApi = {
-  search: (q: string) => api<City[]>(`/weather/cities?q=${encodeURIComponent(q)}`),
-}
+export const weatherApi = {
+  current: ({ latitude, longitude }: Coordinates) =>
+    api<CurrentWeather>(`/weather/current/coordinates?lat=${latitude}&lon=${longitude}`),
 
-export const forecastApi = {
-  get: ({ city, countryCode }: CityRef) => {
+  cities: (q: string) => api<City[]>(`/weather/cities?q=${encodeURIComponent(q)}`),
+
+  forecast: ({ city, countryCode }: CityRef) => {
     const params = new URLSearchParams({ city })
     if (countryCode) params.set('countryCode', countryCode)
     return api<Forecast>(`/weather/forecast?${params}`)

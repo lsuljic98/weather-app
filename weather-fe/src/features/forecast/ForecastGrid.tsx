@@ -6,8 +6,9 @@ import {
   useTable,
 } from '@tanstack/react-table'
 import type { ForecastPoint } from '../../api/weather'
+import { WeatherIcon } from '../../components/WeatherIcon'
 import type { Metric } from './filters'
-import { fullLabel } from './format'
+import { fullLabel } from '../../lib/format'
 
 const features = tableFeatures({
   rowSortingFeature,
@@ -26,15 +27,7 @@ const columns = helper.columns([
     header: 'Conditions',
     cell: (info) => (
       <span className="flex items-center gap-1 capitalize">
-        {info.row.original.icon && (
-          <img
-            src={`https://openweathermap.org/img/wn/${info.row.original.icon}.png`}
-            alt=""
-            width={28}
-            height={28}
-            className="-my-2"
-          />
-        )}
+        {info.row.original.icon && <WeatherIcon code={info.row.original.icon} size={22} />}
         {info.getValue()}
       </span>
     ),

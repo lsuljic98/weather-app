@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { forecastApi, type CityRef } from '../api/weather'
+import { weatherApi, type CityRef } from '../api/weather'
 import { searchesKeys } from './useSearchHistory'
 import { statisticsKeys } from './useStatistics'
 
@@ -11,7 +11,7 @@ export function useForecast(ref: CityRef | null) {
   return useQuery({
     queryKey: ['forecast', ref?.city.toLowerCase(), ref?.countryCode?.toUpperCase() ?? ''],
     queryFn: async () => {
-      const forecast = await forecastApi.get(ref!)
+      const forecast = await weatherApi.forecast(ref!)
       void queryClient.invalidateQueries({ queryKey: statisticsKeys.all })
       void queryClient.invalidateQueries({ queryKey: searchesKeys.all })
       return forecast

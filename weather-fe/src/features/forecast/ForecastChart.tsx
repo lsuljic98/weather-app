@@ -1,7 +1,8 @@
 import { Bar, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { ForecastPoint } from '../../api/weather'
-import { formatMetric, localHour, METRIC_LABELS, metricValue, type Metric } from './filters'
-import { fullLabel, shortDay } from './format'
+import { ChartTooltip } from '../../components/ChartTooltip'
+import { fullLabel, localHour, shortDay } from '../../lib/format'
+import { formatMetric, METRIC_LABELS, metricValue, type Metric } from './filters'
 
 interface ForecastChartProps {
   points: ForecastPoint[]
@@ -13,7 +14,7 @@ export function ForecastChart({ points, metric }: ForecastChartProps) {
   const percent = metric === 'humidity' || metric === 'precipitation'
 
   return (
-    <div className="h-64 text-slate-600 [--series:var(--color-sky-600)] dark:text-slate-300 dark:[--series:var(--color-sky-400)]">
+    <div className="chart h-64">
       <ResponsiveContainer>
         <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
           <XAxis
@@ -38,23 +39,22 @@ export function ForecastChart({ points, metric }: ForecastChartProps) {
             content={({ active, payload }) => {
               const p = payload?.[0]?.payload as (typeof data)[number] | undefined
               return active && p ? (
-                <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-xs shadow-md dark:border-slate-700 dark:bg-slate-900">
-                  <p className="font-medium">{fullLabel(p.localTime)}</p>
+                <ChartTooltip title={fullLabel(p.localTime)}>
                   <p className="capitalize text-slate-500">{p.description}</p>
                   <p className="mt-1">
                     {METRIC_LABELS[metric]}: <span className="font-medium">{formatMetric(p.value, metric)}</span>
                   </p>
-                </div>
+                </ChartTooltip>
               ) : null
             }}
           />
           {metric === 'precipitation' ? (
-            <Bar dataKey="value" fill="var(--series)" radius={[4, 4, 0, 0]} isAnimationActive={false} />
+            <Bar dataKey="value" fill="var(--chart-series)" radius={[4, 4, 0, 0]} isAnimationActive={false} />
           ) : (
             <Line
               type="monotone"
               dataKey="value"
-              stroke="var(--series)"
+              stroke="var(--chart-series)"
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 4 }}

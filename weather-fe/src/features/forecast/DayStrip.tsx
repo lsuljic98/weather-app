@@ -1,5 +1,6 @@
 import type { ForecastDay } from '../../api/weather'
-import { weekday } from './format'
+import { WeatherIcon } from '../../components/WeatherIcon'
+import { weekday } from '../../lib/format'
 
 interface DayStripProps {
   days: ForecastDay[]
@@ -26,15 +27,7 @@ export function DayStrip({ days, selected, onSelect }: DayStripProps) {
               }`}
             >
               <p className="text-xs text-slate-500">{weekday(d.date)}</p>
-              {d.icon && (
-                <img
-                  src={`https://openweathermap.org/img/wn/${d.icon}.png`}
-                  alt={d.condition}
-                  width={40}
-                  height={40}
-                  className="mx-auto -my-1"
-                />
-              )}
+              {d.icon && <WeatherIcon code={d.icon} size={36} label={d.condition} className="mx-auto my-1" />}
               <p className="tabular-nums">
                 <span className="font-medium">{Math.round(d.maxTemperatureC)}°</span>
                 <span className="ml-1 text-slate-500">{Math.round(d.minTemperatureC)}°</span>

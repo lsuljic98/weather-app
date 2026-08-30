@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { statisticsApi } from '../api/statistics'
 
-// Always served from the database: staleTime 0 so a new search shows up on the next visit.
 export const statisticsKeys = { all: ['statistics'] as const }
+
+// staleTime 0 on all three: statistics are always read fresh from the database.
 
 export function useTopCities(take = 3) {
   return useQuery({

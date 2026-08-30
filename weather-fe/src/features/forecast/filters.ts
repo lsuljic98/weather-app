@@ -1,4 +1,5 @@
 import type { ForecastPoint } from '../../api/weather'
+import { localDate, localHour } from '../../lib/format'
 
 export const PARTS_OF_DAY = ['all', 'night', 'morning', 'afternoon', 'evening'] as const
 export type PartOfDay = (typeof PARTS_OF_DAY)[number]
@@ -28,11 +29,6 @@ export const PART_LABELS: Record<PartOfDay, string> = {
   afternoon: 'Afternoon (12–17)',
   evening: 'Evening (18–23)',
 }
-
-// The API's localTime already carries the city's offset, so the date and hour are
-// read straight off the string instead of going through the browser's timezone.
-export const localDate = (iso: string) => iso.slice(0, 10)
-export const localHour = (iso: string) => Number(iso.slice(11, 13))
 
 export function partOfDayFor(hour: number): Exclude<PartOfDay, 'all'> {
   if (hour < 6) return 'night'

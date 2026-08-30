@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { citiesApi } from '../api/weather'
+import { weatherApi } from '../api/weather'
 import { useDebouncedValue } from './useDebouncedValue'
 
 const MIN_LENGTH = 2
@@ -10,7 +10,7 @@ export function useCitySearch(input: string) {
 
   const result = useQuery({
     queryKey: ['cities', query.toLowerCase()],
-    queryFn: () => citiesApi.search(query),
+    queryFn: () => weatherApi.cities(query),
     enabled,
     staleTime: 12 * 60 * 60_000,
     placeholderData: keepPreviousData,

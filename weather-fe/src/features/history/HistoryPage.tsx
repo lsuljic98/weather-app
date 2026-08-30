@@ -1,13 +1,14 @@
 import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import { ApiError } from '../../api/client'
+import { Button } from '../../components/Button'
+import { WeatherIcon } from '../../components/WeatherIcon'
 import { useSearchHistory } from '../../hooks/useSearchHistory'
-
-const PAGE_SIZE = 20
+import { formatDateTime } from '../../lib/format'
 
 export function HistoryPage() {
   const [params, setParams] = useSearchParams()
   const page = Math.max(1, Number(params.get('page')) || 1)
-  const { data, isPending, isError, error, isPlaceholderData } = useSearchHistory(page, PAGE_SIZE)
+  const { data, isPending, isError, error, isPlaceholderData } = useSearchHistory(page)
 
   const goTo = (next: number) => setParams(next === 1 ? {} : { page: String(next) })
 
@@ -74,22 +75,14 @@ export function HistoryPage() {
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
             {data.items.map((s) => (
               <tr key={s.id}>
-                <td className="px-3 py-2 whitespace-nowrap text-slate-500">{formatWhen(s.searchedAt)}</td>
+                <td className="px-3 py-2 whitespace-nowrap text-slate-500">{formatDateTime(s.searchedAt)}</td>
                 <td className="px-3 py-2 whitespace-nowrap">
                   {s.city}
                   <span className="ml-1 text-slate-500">{s.country}</span>
                 </td>
                 <td className="px-3 py-2">
                   <span className="flex items-center gap-1 capitalize">
-                    {s.icon && (
-                      <img
-                        src={`https://openweathermap.org/img/wn/${s.icon}.png`}
-                        alt=""
-                        width={28}
-                        height={28}
-                        className="-my-2"
-                      />
-                    )}
+                    {s.icon && <WeatherIcon code={s.icon} size={22} />}
                     {s.description}
                   </span>
                 </td>
@@ -112,37 +105,17 @@ export function HistoryPage() {
 
       {data.totalPages > 1 && (
         <nav className="flex items-center justify-between text-sm" aria-label="Pagination">
-          <button
-            type="button"
-            onClick={() => goTo(data.page - 1)}
-            disabled={!data.hasPrevious}
-            className="rounded-md border border-slate-300 px-3 py-1 hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-transparent dark:border-slate-700 dark:hover:bg-slate-800"
-          >
+          <Button onClick={() => goTo(data.page - 1)} disabled={!data.hasPrevious}>
             Previous
-          </button>
+          </Button>
           <span className="text-slate-500">
             Page {data.page} of {data.totalPages}
           </span>
-          <button
-            type="button"
-            onClick={() => goTo(data.page + 1)}
-            disabled={!data.hasNext}
-            className="rounded-md border border-slate-300 px-3 py-1 hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-transparent dark:border-slate-700 dark:hover:bg-slate-800"
-          >
+          <Button onClick={() => goTo(data.page + 1)} disabled={!data.hasNext}>
             Next
-          </button>
+          </Button>
         </nav>
       )}
     </div>
   )
-}
-
-function formatWhen(iso: string) {
-  return new Date(iso).toLocaleString(undefined, {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
 }

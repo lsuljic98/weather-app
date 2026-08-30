@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { CurrentWeatherWidget } from '../features/current-widget/CurrentWeatherWidget'
+import { Button } from '../components/Button'
 import { useAuth } from '../hooks/useAuth'
 
 const tabs = [
@@ -37,13 +38,7 @@ export function AppShell() {
         </div>
         <div className="flex items-center gap-3 text-sm">
           <span className="text-slate-500">{user?.email}</span>
-          <button
-            type="button"
-            onClick={() => void logout()}
-            className="rounded-md border border-slate-300 px-3 py-1 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
-          >
-            Sign out
-          </button>
+          <Button onClick={() => void logout()}>Sign out</Button>
         </div>
       </header>
 

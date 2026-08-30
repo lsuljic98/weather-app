@@ -1,6 +1,10 @@
+import type { ReactNode } from 'react'
 import type { Coordinates, CurrentWeather } from '../../api/weather'
+import { Button } from '../../components/Button'
+import { WeatherIcon } from '../../components/WeatherIcon'
 import { useCurrentWeather } from '../../hooks/useCurrentWeather'
 import { useGeolocation } from '../../hooks/useGeolocation'
+import { formatTime } from '../../lib/format'
 
 // Where the widget points when the browser can't tell us where the user is.
 const FALLBACK: Coordinates = { latitude: 45.815, longitude: 15.9819 } // Zagreb
@@ -26,13 +30,9 @@ export function CurrentWeatherWidget() {
         <p className="text-sm text-slate-600 dark:text-slate-300">
           Couldn't load the current weather.
         </p>
-        <button
-          type="button"
-          onClick={() => void refetch()}
-          className="mt-3 rounded-md border border-slate-300 px-3 py-1 text-sm hover:bg-white dark:border-slate-600 dark:hover:bg-slate-700"
-        >
+        <Button onClick={() => void refetch()} className="mt-3">
           Try again
-        </button>
+        </Button>
       </Card>
     )
   }
@@ -50,15 +50,7 @@ export function CurrentWeatherWidget() {
           </p>
           <p className="mt-1 text-sm capitalize opacity-90">{data.description}</p>
         </div>
-        {data.icon && (
-          <img
-            src={`https://openweathermap.org/img/wn/${data.icon}@2x.png`}
-            alt={data.condition}
-            width={100}
-            height={100}
-            className="-mt-2 -mr-2 drop-shadow"
-          />
-        )}
+        {data.icon && <WeatherIcon code={data.icon} size={88} label={data.condition} className="-mt-1 drop-shadow" />}
       </div>
 
       <dl className="mt-4 grid grid-cols-3 gap-2 text-sm">
@@ -76,7 +68,7 @@ export function CurrentWeatherWidget() {
   )
 }
 
-function Card({ className, children }: { className?: string; children: React.ReactNode }) {
+function Card({ className, children }: { className?: string; children: ReactNode }) {
   return <section className={`rounded-2xl p-6 shadow-md ${className ?? ''}`}>{children}</section>
 }
 
@@ -133,8 +125,4 @@ function backgroundFor({ condition, icon }: CurrentWeather) {
     default: // Mist, Fog, Haze, …
       return 'bg-gradient-to-br from-slate-400 to-slate-500'
   }
-}
-
-function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
 }

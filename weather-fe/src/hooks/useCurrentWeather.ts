@@ -7,7 +7,7 @@ export function useCurrentWeather(coords: Coordinates | null) {
   return useQuery({
     // Rounded to account for GPS drift
     queryKey: ['weather', 'current', coords?.latitude.toFixed(2), coords?.longitude.toFixed(2)],
-    queryFn: () => weatherApi.currentAt(coords!),
+    queryFn: () => weatherApi.current(coords!),
     enabled: coords !== null,
     staleTime: TEN_MINUTES,
     refetchInterval: TEN_MINUTES,

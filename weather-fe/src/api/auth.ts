@@ -24,6 +24,4 @@ export const authApi = {
     api<TokenResponse>('/auth/register', { method: 'POST', body, skipAuthRetry: true }),
 
   logout: () => api<void>('/auth/logout', { method: 'POST', skipAuthRetry: true }),
-
-  me: () => api<User>('/auth/me'),
 }

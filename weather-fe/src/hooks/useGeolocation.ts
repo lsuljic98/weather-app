@@ -15,7 +15,7 @@ export function useGeolocation(): GeolocationState {
   )
 
   useEffect(() => {
-    if (state.status !== 'locating') return
+    if (!('geolocation' in navigator)) return
 
     let cancelled = false
     navigator.geolocation.getCurrentPosition(
@@ -39,8 +39,6 @@ export function useGeolocation(): GeolocationState {
     return () => {
       cancelled = true
     }
-    // Runs once: state only leaves 'locating' via the callbacks above.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return state

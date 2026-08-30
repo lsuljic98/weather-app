@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useReturnTo } from '../../hooks/useReturnTo'
 import { ErrorAlert } from '../../components/ErrorAlert'
 import { Field } from '../../components/Field'
-import { SubmitButton } from '../../components/SubmitButton'
+import { Button } from '../../components/Button'
 import { AuthCard } from './AuthCard'
 
 // Mirrors LoginRequest on the server.
@@ -74,9 +74,9 @@ export function LoginPage() {
           {...register('password')}
         />
         <ErrorAlert message={serverError} />
-        <SubmitButton pending={isSubmitting} pendingLabel="Signing in…">
-          Sign in
-        </SubmitButton>
+        <Button type="submit" variant="primary" disabled={isSubmitting} className="w-full">
+          {isSubmitting ? 'Signing in…' : 'Sign in'}
+        </Button>
       </form>
     </AuthCard>
   )

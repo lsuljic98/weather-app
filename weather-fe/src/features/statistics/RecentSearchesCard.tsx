@@ -1,4 +1,6 @@
+import { WeatherIcon } from '../../components/WeatherIcon'
 import { useRecentSearches } from '../../hooks/useStatistics'
+import { formatDateTime } from '../../lib/format'
 import { StatCard } from './StatCard'
 
 export function RecentSearchesCard() {
@@ -15,15 +17,7 @@ export function RecentSearchesCard() {
       <ul className="divide-y divide-slate-100 dark:divide-slate-800">
         {data.map((s) => (
           <li key={s.id} className="flex items-center gap-3 py-2 text-sm">
-            {s.icon && (
-              <img
-                src={`https://openweathermap.org/img/wn/${s.icon}.png`}
-                alt={s.condition}
-                width={40}
-                height={40}
-                className="-my-1 shrink-0"
-              />
-            )}
+            {s.icon && <WeatherIcon code={s.icon} size={36} />}
             <div className="min-w-0 flex-1">
               <p className="truncate">
                 {s.city}
@@ -35,20 +29,11 @@ export function RecentSearchesCard() {
             </div>
             <div className="shrink-0 text-right">
               <p className="font-medium tabular-nums">{Math.round(s.temperatureC)}°</p>
-              <p className="text-xs text-slate-500">{formatWhen(s.searchedAt)}</p>
+              <p className="text-xs text-slate-500">{formatDateTime(s.searchedAt)}</p>
             </div>
           </li>
         ))}
       </ul>
     </StatCard>
   )
-}
-
-function formatWhen(iso: string) {
-  return new Date(iso).toLocaleString(undefined, {
-    day: 'numeric',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
 }
