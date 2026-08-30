@@ -4,7 +4,7 @@ A full-stack weather app: sign in, see the weather where you are, search any cit
 5-day forecast (grid + chart with filters), and look back over your search history and
 statistics. Weather data comes from [OpenWeather](https://openweathermap.org/api).
 
-**Stack:** .NET 10 Web API · PostgreSQL 17 · React 19 (Vite, TypeScript, Tailwind) · Docker Compose
+**Stack:** .NET 10 Web API - PostgreSQL 17 - React 19 (Vite, TypeScript, Tailwind) - Docker
 
 ---
 
@@ -37,7 +37,7 @@ instead: `docker compose -f docker-compose.yml up --build`.
 | --- | --- | --- |
 | `OPENWEATHER_API_KEY` | yes | From your OpenWeather account |
 | `POSTGRES_PASSWORD` | yes | Anything; the DB is local |
-| `JWT_KEY` | yes | ≥ 32 bytes for HS256 — `openssl rand -base64 48` |
+| `JWT_KEY` | yes | At least 32 bytes for HS256, e.g. `openssl rand -base64 48` |
 | `JWT_ACCESS_MINUTES` / `JWT_REFRESH_DAYS` | no | Defaults 15 / 7 |
 | `WEB_PORT` / `API_PORT` / `DB_PORT` / `PGADMIN_PORT` | no | Host ports, defaults above |
 
@@ -56,10 +56,9 @@ in compose).
 ```
 
 The browser talks to **one origin only**. nginx (prod) or the Vite dev server (dev) proxies
-`/api/*` to the backend, so there is no CORS and the auth cookie is first-party. See
-[DOCKER.md](DOCKER.md) for the container setup in depth.
+`/api/*` to the backend, so there is no CORS and the auth cookie is first-party.
 
-### Backend — `weather-be/`
+### Backend (`weather-be/`)
 
 Clean-architecture layout, one project per layer:
 
@@ -77,10 +76,10 @@ already-used token revokes the whole chain.
 
 **Searches.** Fetching a forecast *is* a search: `GET /api/weather/forecast` records a row
 with a snapshot of the conditions at that moment. History and statistics are then plain
-per-user queries on that table — always read from the database, never a cache — and every
+per-user queries on that table, always read from the database and never from a cache. Every
 read path is covered by a `(user_id, …)` composite index.
 
-### Frontend — `weather-fe/src/`
+### Frontend (`weather-fe/src/`)
 
 ```
 api/          fetch client (bearer injection, single-flight refresh + retry) and typed endpoint calls
@@ -109,8 +108,6 @@ and is scoped to the caller.
 | GET | `/searches?page&pageSize` | Paged history |
 | GET | `/statistics/top-cities` · `/statistics/recent` · `/statistics/conditions` | Statistics cards |
 
-Errors are RFC 7807 `ProblemDetails`.
-
 ---
 
 ## Development
@@ -124,7 +121,7 @@ dotnet ef migrations add <Name> -p WeatherApp.Infrastructure -s WeatherApp.API
 # Frontend (needs Node 24)
 cd weather-fe
 npm ci
-npm run dev                                  # expects the API on http://api:8080 — use Docker, or edit vite.config.ts
+npm run dev                                  # expects the API on http://api:8080: use Docker, or edit vite.config.ts
 npm test                                     # Vitest
 npm run lint && npm run build                # what CI would run
 ```
@@ -135,18 +132,3 @@ Secrets for running the API outside Docker go in user secrets, not `appsettings.
 dotnet user-secrets set "WeatherServiceConfiguration:ApiKey" "<key>" --project weather-be/WeatherApp.API
 dotnet user-secrets set "Auth:Key" "<key>" --project weather-be/WeatherApp.API
 ```
-
----
-
-## Decisions worth knowing
-
-- **Single origin, no CORS** — the proxy is the whole cross-origin story.
-- **Access token in memory, refresh token in an `HttpOnly` cookie** — nothing auth-related
-  is readable from JavaScript; a page reload silently restores the session.
-- **`GET /weather/forecast` has a side effect** — it writes the search row. Doing it
-  server-side means a client can't fetch a forecast and "forget" to record it.
-- **Condition snapshot on the `searches` row** — history and all three statistics are
-  single-table queries with no second call to OpenWeather.
-- **Forecast is aggregated on the backend** — OpenWeather returns 3-hour steps; the API
-  returns those plus daily min/max summaries so grid and chart agree by construction.
-- **Own SVG weather icons** — OpenWeather's PNG set renders "clear night" as a grey disc.
